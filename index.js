@@ -93,6 +93,36 @@ app.post('/generate-image', upload.single('image'), async (req, res) => {
     }          
   });
 
+app.post('/api/chat', async (req, res) => {
+  const { prompt } = req.body;  
+  try {
+
+    if (!Array.isArray(prompt)) throw new Error('Prompt must be an array of messages.');
+
+    const contents = prompt.map(({role, text}) => ({
+      role,
+      parts: [{ type: 'text', text }]
+    }));
+
+    const response = await ai.models.generateContent({
+      model: models,
+      contents,
+      config: {
+        temperature: 0.9,
+        systemInstructions: "jawab menggunakan bahasa Indonesia dan scope nya hanya tentang pertumbuhan anak selain itu jawab pertanyaan tidak sesuai.",
+      },
+    });
+    // const interaction = await ai.interactions.create({
+    //   model: models,  
+    //   input: prompt,
+    // });
+    res.json({ output: response.text });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while generating text.' });
+  } 
+});
+
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
