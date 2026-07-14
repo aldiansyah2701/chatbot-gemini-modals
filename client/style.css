@@ -34,7 +34,8 @@ h1 {
   padding: 8px 12px;
   border-radius: 20px;
   max-width: 80%;
-  display: inline-block;
+  display: block;
+  clear: both;
 }
 
 .message.user {

@@ -3,6 +3,7 @@ import dotenv from "dotenv"
 import express from "express";
 import multer from "multer";
 import fs from 'fs/promises';
+import cors from "cors";
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ const upload = multer();
 const port = 3000;
 
 app.use(express.json());
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("Hello aldia!f");
