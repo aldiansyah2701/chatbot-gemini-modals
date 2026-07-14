@@ -4,20 +4,32 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Gemini AI Chatbot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <div class="container">
-    <h1>Gemini AI Chatbot</h1>
-    <div class="sessions">
-      <select id="session-select"></select>
-      <button id="new-session-btn" type="button">New Session</button>
+  <div class="app">
+    <div class="chat-card">
+      <header class="chat-header">
+        <div class="title">
+          <h1>Gemini AI</h1>
+          <p class="subtitle">Anak & pertumbuhan — jawaban dalam Bahasa Indonesia</p>
+        </div>
+        <div class="session-controls">
+          <select id="session-select" aria-label="Select session"></select>
+          <button id="new-session-btn" type="button">New</button>
+        </div>
+      </header>
+
+      <main id="chat-box" class="chat-box" role="log" aria-live="polite"></main>
+
+      <form id="chat-form" class="chat-input" autocomplete="off">
+        <input type="text" id="user-input" placeholder="Type your message..." autocomplete="off" required />
+        <button type="submit" class="send-btn">Send</button>
+      </form>
     </div>
-    <div id="chat-box" class="chat-box"></div>
-    <form id="chat-form">
-      <input type="text" id="user-input" placeholder="Type your message..." autocomplete="off" required />
-      <button type="submit">Send</button>
-    </form>
   </div>
   <script src="script.js"></script>
 </body>
