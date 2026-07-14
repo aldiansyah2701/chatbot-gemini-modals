@@ -10,6 +10,31 @@ let currentSessionId = null;
 
 const API_BASE = (location.protocol === 'file:') ? 'http://localhost:3000' : location.origin;
 
+// Simple HTML escape to avoid XSS when rendering server text
+function escapeHtml(unsafe) {
+  return unsafe
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+// Render basic formatting: paragraphs, line breaks, and **bold**
+function renderRichText(text) {
+  if (!text) return '';
+  const escaped = escapeHtml(String(text));
+  // Handle paragraphs (double newlines)
+  const paragraphs = escaped.split(/\n{2,}/g).map(p => {
+    // Replace single newlines with <br>
+    const withBreaks = p.replace(/\n/g, '<br>');
+    // Replace **bold** with <strong>
+    const withBold = withBreaks.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    return `<p>${withBold}</p>`;
+  });
+  return paragraphs.join('');
+}
+
 function loadSessions() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -68,7 +93,8 @@ function appendMessageToDOM(sender, text, save = true) {
 
   const bubble = document.createElement('div');
   bubble.className = 'bubble';
-  bubble.textContent = text;
+  // render safe, formatted HTML (paragraphs, bold, line breaks)
+  bubble.innerHTML = renderRichText(text);
 
   msg.appendChild(avatar);
   msg.appendChild(bubble);
